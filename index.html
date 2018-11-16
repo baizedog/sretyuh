@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>登录表</title>
+<style>
+	*{
+		font-size: 24px;
+		line-height: 1.8;
+		margin: 0;
+	}
+	.body{
+		background-color: antiquewhite;
+		height: 100%;
+		width: 100%;
+	}
+	.big{
+		height: 600px;
+		background-color: antiquewhite;
+	}
+	.small{
+		width:295px;
+		height: 350.2px;
+	    background-color: powderblue;
+		position: relative;
+		left: 40%;
+		top:20%;
+	}
+	</style>
+</head>
+<body>
+	<div class="big">
+	<div class="small">
+	<label>用户名：</label><br>
+	<input type="text" placeholder="用户名" id="username"/><br>
+	<label>密码: </label><br>
+	<input type="password" placeholder="密码" id="password"/><br>
+	<label>验证码：</label><img id="img" onClick="refresh()" alt="验证码" src="http://tech.sky31.top/code.php"/><br>
+	<input type="text" placeholder="验证码" id="code"/><br>
+	<button id="join" name="submit" target="_blank" >登录</button>
+	<p style="text-align: center;">即使很丑，但也要自信</p>
+	</div>
+	</div>
+<!--	<p id="result"></p>-->
+	<div id="Code"></div>
+	<div id="msg"></div>
+	<div id="name"></div>
+	<div id="sex"></div>
+	<div id="age"></div>
+	<div id="phone"></div>
+	<div id="adress"></div>
+	<script>
+		let result;
+	document.getElementById("join").onclick = function(){
+		var request = new XMLHttpRequest();
+		request.open("POST","http://tech.sky31.top/login.php",true);
+		request.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=utf-8");
+		var data= "username=" + document.getElementById("username").value 
+		+"&password=" + document.getElementById("password").value
+		+ "&code=" + document.getElementById("code").value
+		request.send(data);
+		request.onreadystatechange=function(){
+			if(request.readyState === 4){
+				if(request.status ===200){
+					result = JSON.parse(request.responseText);
+//					document.getElementById("result").innerHTML = request.responseText;
+					show();
+				}else{
+					alert("错误："+request.status);
+				}
+			}
+	}
+	}
+	function show(){
+		document.getElementById("Code").innerHTML = result['code'];
+		document.getElementById("msg").innerHTML = result['msg'];
+		document.getElementById("name").innerHTML = result['data']['name'];
+		document.getElementById("sex").innerHTML = result['data']['sex'];
+		document.getElementById("age").innerHTML = result['data']['age'];
+		document.getElementById("adress").innerHTML = result['data']['other']['address'];
+		document.getElementById("phone").innerHTML = result['data']['other']['phone'];
+		
+		
+	}
+
+	function refresh(){
+		img.src='http://tech.sky31.top/code.php?='+Math.random();
+	}
+	</script>
+</body>
+</html>
